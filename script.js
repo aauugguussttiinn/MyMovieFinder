@@ -18,7 +18,20 @@ async function movieApi (event) {
         <p class="card-text" id="${imdbID}"></p>
       </div>
       <div class="card-body">
-        <button class="btn btn-primary" id="movie${i}" onclick="popupDisplay()">Read More</button>
+        <button class="btn btn-primary" id="movie${i}" onclick="popupDisplay(${i})">Read More</button>
+      </div>
+    </div>
+    <div id="myModal${i}" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="card bg-dark text-white">
+          <img class="card-img" src="${Poster}" alt="Card image">
+          <div class="card-img-overlay">
+            <h5 class="card-title">${Title}</h5>
+            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+            <p class="card-text">Last updated 3 mins ago</p>
+          </div>
+        </div>
       </div>
     </div>
     </br>`
@@ -60,9 +73,9 @@ const createObserver = () => {
 // ------------------------- MODAL TO SEE MORE DETAILS -------------------------
 
 
-function popupDisplay() {
+function popupDisplay(i) {
   console.log("ça marche wesh");
-  var modal = document.getElementById("myModal");
+  var modal = document.getElementById(`myModal${i}`);
   var span = document.getElementsByClassName("close")[0];
   modal.style.display = "block";
 
