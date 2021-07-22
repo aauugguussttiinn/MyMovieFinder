@@ -7,7 +7,7 @@ async function movieApi (event) {
   var resultsSection = document.getElementById('searchResultsList');
   for (i = 0 ; i < moviesList.Search.length ; i++) {
     const { Poster, Title, imdbID } = moviesList.Search[i];
-    var releaseDate = getReleaseDate(imdbID)
+    getReleaseDate(imdbID);
 
 
     resultsSection.innerHTML +=
@@ -16,10 +16,10 @@ async function movieApi (event) {
       <img class="card-img-top" src="${Poster}" alt="Poster img">
       <div class="card-body">
         <h5 class="card-title">${Title}</h5>
-        <p class="card-text">Released : ${releaseDate}</p>
+        <p class="card-text" id="${imdbID}"></p>
       </div>
       <div class="card-body">
-        <a href="#" class="card-link">See more</a>
+        <button class="btn btn-primary" id="" href="#">Read More</button>
       </div>
     </div>
     </br>`
@@ -28,9 +28,9 @@ async function movieApi (event) {
   async function getReleaseDate (id) {
     const response2 = await fetch(`http://www.omdbapi.com/?apikey=758f13f9&i=${id}`);
     const theReleaseDate = await response2.json();
-    console.log(theReleaseYear)
-    const { Released } = theReleaseDate.Released
-    console.log(Released)
+    const { Released } = theReleaseDate
+    var releaseParagraph = document.getElementById(`${id}`)
+    releaseParagraph.innerHTML += `Released : ${Released}`
   }
 
 
