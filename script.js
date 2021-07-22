@@ -11,14 +11,14 @@ async function movieApi (event) {
     const { Poster, Title, imdbID } = moviesList.Search[i];
     getReleaseDate(imdbID);
     resultsSection.innerHTML +=
-    `<div class="card" id="movie${i}" style="width: 18rem; opacity: 0.3">
+    `<div class="card" style="width: 18rem; opacity: 0">
       <img class="card-img-top" src="${Poster}" alt="Poster img">
       <div class="card-body">
         <h5 class="card-title">${Title}</h5>
         <p class="card-text" id="${imdbID}"></p>
       </div>
       <div class="card-body">
-        <button class="btn btn-primary" id="" href="#">Read More</button>
+        <button class="btn btn-primary" id="movie${i}" onclick="popupDisplay()">Read More</button>
       </div>
     </div>
     </br>`
@@ -36,81 +36,47 @@ async function getReleaseDate (id) {
 }
 
 
-
-
-
-
-
+// ------------------------- PROGRESSIVE LOADING OF MOVIES -------------------------
 
 const createObserver = () => {
-  const makeCardAppear = (entries, observer) => {
-    entries.forEach(entry => {
-      entry.target.style = "width: 18rem; opacity: 1";
-    });
-  };
-  for (i = 0 ; i < divToGet.length ; i++) {
-
-    const options = {
-      root: document.getElementById(`movie${i}`),
-      rootMargin: '0px',
+    const showCard = (entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.intersectionRatio > 0.8) entry.target.style = "width: 18rem; opacity: 1";
+      });
+    };
+    
+    var options = {
       threshold: 0.8
     }
+
+    var observer = new IntersectionObserver(showCard, options);
     
-    const observer = new IntersectionObserver(makeCardAppear, options);
-    
-    const target = document.getElementById(`movie${i}`);
-    console.log(target)
-    
-    observer.observe(target);
-  }
+    var targets = document.querySelectorAll(`.card`);
+    targets.forEach(function (target) {
+      observer.observe(target);
+    })
 };
+
+// ------------------------- MODAL TO SEE MORE DETAILS -------------------------
+
+
+function popupDisplay() {
+  console.log("ça marche wesh");
+  var modal = document.getElementById("myModal");
+  var span = document.getElementsByClassName("close")[0];
+  modal.style.display = "block";
+
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+}
+
 
 document.getElementById('submit-btn').addEventListener('click', movieApi);
 
-
-  // var targetElement;
-  // var numSteps = 20.0;
-  // var noOpacity = "1";
-  
-
-  // window.addEventListener("load", function(event) {
-  //   targetElement = document.querySelector('#movie3');
-  //   console.log(targetElement)
-  //   createObserver();
-  // }, false);
-  
-
-  // function createObserver() {
-  //   var observer;
-
-  //   var options = {
-  //     root: null,
-  //     rootMargin: "0px",
-  //     threshold: 1.0
-  //   };
-
-  //   observer = new IntersectionObserver(handleIntersect, options);
-  //   console.log(targetElement);
-  //   observer.observe(targetElement);
-  // }
-
-  // function handleIntersect(entries, observer) {
-  //   entries.forEach(function(entry) {
-  //     entry.target.style.opacity = noOpacity;
-  //   });
-  // }
-
-
-
-
-
-// const observerLauncher = (theId) => {
-//   var options = {
-//     root: document.querySelector('#searchResultsList'),
-//     rootMargin: '0px',
-//     threshold: 1.0
-//   }
-//   var observer = new IntersectionObserver(callback, options);
-//   var target = document.querySelector(`#${theId}`);
-//   observer.observe(target);
-// }

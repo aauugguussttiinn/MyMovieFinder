@@ -1,0 +1,9 @@
+.invisible-card {
+  opacity: 0;
+}
+
+
+.visible-card {
+  opacity: 1;
+  transform: translateX(50px);
+}
