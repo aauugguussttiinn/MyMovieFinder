@@ -1,3 +1,5 @@
+divToGet = [];
+
 async function movieApi (event) {
   event.preventDefault();
   var keyword = document.getElementById('formInput').value;
@@ -9,7 +11,7 @@ async function movieApi (event) {
     const { Poster, Title, imdbID } = moviesList.Search[i];
     getReleaseDate(imdbID);
     resultsSection.innerHTML +=
-    `<div class="card" style="width: 18rem; opacity: 0">
+    `<div class="card" id="movie${i}" style="width: 18rem; opacity: 0.3">
       <img class="card-img-top" src="${Poster}" alt="Poster img">
       <div class="card-body">
         <h5 class="card-title">${Title}</h5>
@@ -20,7 +22,9 @@ async function movieApi (event) {
       </div>
     </div>
     </br>`
+    divToGet.push(`movie${i}`)
   }
+  createObserver()
 }
 
 async function getReleaseDate (id) {
@@ -31,40 +35,72 @@ async function getReleaseDate (id) {
   releaseParagraph.innerHTML += `Released : ${Released}`
 }
 
+
+
+
+
+
+
+
+const createObserver = () => {
+  const makeCardAppear = (entries, observer) => {
+    entries.forEach(entry => {
+      entry.target.style = "width: 18rem; opacity: 1";
+    });
+  };
+  for (i = 0 ; i < divToGet.length ; i++) {
+
+    const options = {
+      root: document.getElementById(`movie${i}`),
+      rootMargin: '0px',
+      threshold: 0.8
+    }
+    
+    const observer = new IntersectionObserver(makeCardAppear, options);
+    
+    const target = document.getElementById(`movie${i}`);
+    console.log(target)
+    
+    observer.observe(target);
+  }
+};
+
 document.getElementById('submit-btn').addEventListener('click', movieApi);
 
-var targetElement;
-var numSteps = 20.0;
-var prevRatio = 0.0;
-var noOpacity = "none";
 
-window.addEventListener("load", function(event) {
-  targetElement = document.getElementsByClassName('card');
+  // var targetElement;
+  // var numSteps = 20.0;
+  // var noOpacity = "1";
+  
 
-  createObserver();
-}, false);
+  // window.addEventListener("load", function(event) {
+  //   targetElement = document.querySelector('#movie3');
+  //   console.log(targetElement)
+  //   createObserver();
+  // }, false);
+  
+
+  // function createObserver() {
+  //   var observer;
+
+  //   var options = {
+  //     root: null,
+  //     rootMargin: "0px",
+  //     threshold: 1.0
+  //   };
+
+  //   observer = new IntersectionObserver(handleIntersect, options);
+  //   console.log(targetElement);
+  //   observer.observe(targetElement);
+  // }
+
+  // function handleIntersect(entries, observer) {
+  //   entries.forEach(function(entry) {
+  //     entry.target.style.opacity = noOpacity;
+  //   });
+  // }
 
 
-
-function createObserver() {
-  var observer;
-
-  var options = {
-    root: null,
-    rootMargin: "0px",
-    threshold: 1.0
-  };
-
-  observer = new IntersectionObserver(handleIntersect, options);
-  console.log(targetElement);
-  observer.observe(targetElement);
-}
-
-function handleIntersect(entries, observer) {
-  entries.forEach(function(entry) {
-    entry.target.style.opacity = noOpacity;
-  });
-}
 
 
 
