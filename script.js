@@ -3,7 +3,7 @@ divToGet = [];
 async function movieApi (event) {
   event.preventDefault();
   var keyword = document.getElementById('formInput').value;
-  const response1 = await fetch(`http://www.omdbapi.com/?apikey=758f13f9&s=${keyword}`);
+  const response1 = await fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=${keyword}`);
   const moviesList = await response1.json();
   var resultsSection = document.getElementById('searchResultsList');
   resultsSection.innerHTML = '';
@@ -28,30 +28,31 @@ async function movieApi (event) {
 }
 
 async function getReleaseDate (id) {
-  const response2 = await fetch(`http://www.omdbapi.com/?apikey=758f13f9&i=${id}`);
+  const response2 = await fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&i=${id}`);
   const movieData = await response2.json();
-  console.log(movieData)
   const { Released, Title, Plot, Poster, Country, Runtime, Year } = movieData
   var releaseParagraph = document.getElementById(`release${id}`)
   releaseParagraph.innerHTML += `Released : ${Released}`
   var divForModalDisplay = document.getElementById(`modal${id}`)
   divForModalDisplay.innerHTML +=
   `<div id="myModal${id}" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <div class="card bg-dark text-white">
-        <img class="card-img" src="${Poster}" alt="Card image">
-        <div class="card-img-overlay">
-          <h5 class="card-title">${Title}</h5>
-          <p class="card-text">${Plot}</p>
-          <p class="card-text">${Runtime}</p>
+    <div class="modal-content d-flex justify-content-between">
+      <span class="close m-2">&times;</span>
+      <div class="d-flex align-items-center row m-2">
+        <img class="col d-flex justify-content-center" src="${Poster}" alt="Card image" style="width: 18rem">
+        <div class="col">
+            <h3 class="text-primary">${Title}</h3>
+            <p class="">${Plot}</p>
+            <p class="">${Country}, ${Year}</p>
+            <p class="">${Runtime}</p>
         </div>
       </div>
+      <div></div>
     </div>
   </div>`
 }
 
-
+//close d-flex justify-content-end
 // ------------------------- PROGRESSIVE LOADING OF MOVIES -------------------------
 
 const createObserver = () => {
@@ -77,10 +78,8 @@ const createObserver = () => {
 
 
 function popupDisplay(imdbID, i) {
-  console.log("Function is working");
   var modal = document.getElementById(`myModal${imdbID}`);
   var span = document.getElementsByClassName("close")[i];
-  console.log(i)
   modal.style.display = "block";
 
   span.onclick = function() {

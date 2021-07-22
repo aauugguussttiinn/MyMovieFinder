@@ -16,9 +16,8 @@
   margin-right: auto;
   left: 0;
   right: 0;
-  top: 25%;
-  bottom: 75%;
-  text-align: center;
-  width: 400px;
-  height: 400px;
+  top: 0;
+  bottom: 0;
+  width: 50rem;
+  height: 40rem;
 }
