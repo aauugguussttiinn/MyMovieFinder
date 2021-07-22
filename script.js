@@ -40,7 +40,7 @@ async function getReleaseDate (id) {
       <span class="close m-2">&times;</span>
       <div class="d-flex align-items-center row m-2">
         <img class="col d-flex justify-content-center" src="${Poster}" alt="Card image" style="width: 18rem">
-        <div class="col">
+        <div class="col align-self-start">
             <h3 class="text-primary">${Title}</h3>
             <p class="">${Plot}</p>
             <p class="">${Country}, ${Year}</p>
