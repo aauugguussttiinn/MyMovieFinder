@@ -11,27 +11,14 @@ async function movieApi (event) {
     const { Poster, Title, imdbID } = moviesList.Search[i];
     getReleaseDate(imdbID);
     resultsSection.innerHTML +=
-    `<div class="card" style="width: 18rem; opacity: 0">
+    `<div class="card" id="modal${imdbID}" style="width: 18rem; opacity: 0">
       <img class="card-img-top" src="${Poster}" alt="Poster img">
       <div class="card-body">
         <h5 class="card-title">${Title}</h5>
-        <p class="card-text" id="${imdbID}"></p>
+        <p class="card-text" id="release${imdbID}"></p>
       </div>
       <div class="card-body">
-        <button class="btn btn-primary" id="movie${i}" onclick="popupDisplay(${i})">Read More</button>
-      </div>
-    </div>
-    <div id="myModal${i}" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <div class="card bg-dark text-white">
-          <img class="card-img" src="${Poster}" alt="Card image">
-          <div class="card-img-overlay">
-            <h5 class="card-title">${Title}</h5>
-            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            <p class="card-text">Last updated 3 mins ago</p>
-          </div>
-        </div>
+        <button class="btn btn-primary" id="${imdbID}" onclick="popupDisplay(this.id, ${i})">Read More</button>
       </div>
     </div>
     </br>`
@@ -42,10 +29,26 @@ async function movieApi (event) {
 
 async function getReleaseDate (id) {
   const response2 = await fetch(`http://www.omdbapi.com/?apikey=758f13f9&i=${id}`);
-  const theReleaseDate = await response2.json();
-  const { Released } = theReleaseDate
-  var releaseParagraph = document.getElementById(`${id}`)
+  const movieData = await response2.json();
+  console.log(movieData)
+  const { Released, Title, Plot, Poster, Country, Runtime, Year } = movieData
+  var releaseParagraph = document.getElementById(`release${id}`)
   releaseParagraph.innerHTML += `Released : ${Released}`
+  var divForModalDisplay = document.getElementById(`modal${id}`)
+  divForModalDisplay.innerHTML +=
+  `<div id="myModal${id}" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div class="card bg-dark text-white">
+        <img class="card-img" src="${Poster}" alt="Card image">
+        <div class="card-img-overlay">
+          <h5 class="card-title">${Title}</h5>
+          <p class="card-text">${Plot}</p>
+          <p class="card-text">${Runtime}</p>
+        </div>
+      </div>
+    </div>
+  </div>`
 }
 
 
@@ -73,10 +76,11 @@ const createObserver = () => {
 // ------------------------- MODAL TO SEE MORE DETAILS -------------------------
 
 
-function popupDisplay(i) {
-  console.log("ça marche wesh");
-  var modal = document.getElementById(`myModal${i}`);
-  var span = document.getElementsByClassName("close")[0];
+function popupDisplay(imdbID, i) {
+  console.log("Function is working");
+  var modal = document.getElementById(`myModal${imdbID}`);
+  var span = document.getElementsByClassName("close")[i];
+  console.log(i)
   modal.style.display = "block";
 
   span.onclick = function() {
@@ -89,6 +93,8 @@ function popupDisplay(i) {
     }
   }
 }
+
+
 
 
 document.getElementById('submit-btn').addEventListener('click', movieApi);
